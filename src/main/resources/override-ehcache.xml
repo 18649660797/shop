@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache name="es">
+
+    <diskStore path="java.io.tmpdir"/>
+
+    <defaultCache
+            maxEntriesLocalHeap="1000"
+            eternal="false"
+            timeToIdleSeconds="3600"
+            timeToLiveSeconds="3600"
+            overflowToDisk="false">
+    </defaultCache>
+    <!--
+    maxElementsInMemory：缓存最大数是多少
+    eternal：true缓存永远不过期，false根据timeToLiveSeconds判断失效
+    overflowToDisk：当缓存达到maxElementsInMemory时写入磁盘
+    timeToLiveSeconds：缓存从创建到销毁的间隔（单位：秒）
+    diskPersistent：系统重启后是否从磁盘读取缓存
+-->
+    <!-- 普通accesssToken -->
+    <cache
+            name="accessToken"
+            maxElementsInMemory="1000"
+            eternal="false"
+            overflowToDisk="false"
+            timeToLiveSeconds="3600"/>
+    <cache
+            name="refreshAccessToken"
+            maxElementsInMemory="1000"
+            eternal="false"
+            overflowToDisk="false"
+            timeToLiveSeconds="3600"/>
+    <cache
+            name="wxJsTicket"
+            maxElementsInMemory="1000"
+            eternal="false"
+            overflowToDisk="false"
+            timeToLiveSeconds="3600"/>
+
+</ehcache>
