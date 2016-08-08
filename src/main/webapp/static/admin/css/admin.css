@@ -1,0 +1,15 @@
+div.fixed-bar {
+    height: 64px;
+    width: 100%;
+}
+
+div.fixed-bar .actions-bar {
+    z-index: 1000;
+    position: fixed;
+    bottom: 0px;
+    border-top: solid #ddd 1px;
+    background-color: white;
+    left: 20px;
+    right: 20px;
+    margin: 0;
+}

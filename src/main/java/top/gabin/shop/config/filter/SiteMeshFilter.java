@@ -16,8 +16,12 @@ public class SiteMeshFilter extends ConfigurableSiteMeshFilter {
 
     @Override
     protected void applyCustomConfiguration(SiteMeshFilterBuilder builder) {
-        builder.addDecoratorPath("/*", "/WEB-INF/layouts/fullPageLayout.ftl")
-                .addExcludedPath("/static/*");
+        builder
+                .addExcludedPath("/static/*")
+                .addDecoratorPath("/*", "/WEB-INF/layouts/fullPageLayout.ftl")
+                .addDecoratorPath("/admin", "/WEB-INF/layouts/adminPageLayout.ftl")
+                .addDecoratorPath("/admin/**", "/WEB-INF/layouts/adminPageLayout.ftl")
+                ;
     }
 
 }

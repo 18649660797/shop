@@ -56,11 +56,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         // 暂时禁用csrf,并自定义登录页和登出URL
         http.csrf().disable();
+        // 卧槽,这里自己乱加一个不允许iframe加载的头信息,能不能让自己配置,我去
+        http.headers().disable();
         http.authorizeRequests()
                 .and().formLogin().loginPage("/login").failureUrl("/login?error")
                 .loginProcessingUrl("/login_submit").usernameParameter("username").passwordParameter("password").permitAll()
                 .and().logout().logoutUrl("/logout").permitAll()
-                .and().authorizeRequests().antMatchers("/admin/*", "/admin").hasAuthority("DEFAULT")
+//                .and().authorizeRequests().antMatchers("/admin/*", "/admin").hasAuthority("DEFAULT")
                 // 权限不足页面跳转
                 .and().exceptionHandling().accessDeniedPage("/exception/403")
                 // 记住密码
