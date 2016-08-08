@@ -28,6 +28,10 @@
                 <div class="nav-item-inner nav-supplier">会员</div>
                 <div class="nav-item-mask"></div>
             </li>
+            <li class="nav-item dl-selected">
+                <div class="nav-item-inner nav-supplier">京东</div>
+                <div class="nav-item-mask"></div>
+            </li>
         </ul>
     </div>
     <ul id="J_NavContent" class="dl-tab-conten"></ul>
@@ -55,6 +59,7 @@
                 text: '商品属性',
                 items: [
                     {id: 'productOption', text: '商品规格', href: '/'},
+                    {id: 'productBrand', text: '商品品牌', href: '/admin/product/brand/list'},
                 ]
             }]
         }, {
@@ -64,6 +69,20 @@
                 text: '会员',
                 items: [
                     {id: 'customer', text: '所有会员', href: '/'},
+                ]
+            }]
+        }, {
+            id: 'jd',
+            homePage: 'stockProduct',
+            menu: [{
+                text: '京东采购对接',
+                items: [
+                    {id: 'stockProduct', text: '仓储商品', href: '/admin/jd/stockProduct/list'}
+                ]
+            }, {
+                text: '京东采购单',
+                items: [
+                    {id: 'purchaseOrder', text: '采购单', href: '/admin/jd/purchaseOrder/list'}
                 ]
             }]
         }];

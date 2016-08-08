@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import top.gabin.shop.core.product.dao.ProductDao;
 import top.gabin.shop.core.product.entity.Product;
 import top.gabin.shop.core.product.entity.ProductSku;
-import top.gabin.shop.core.product.form.ProductFormBuilder;
+import top.gabin.shop.core.product.form.ProductBuilder;
 import top.gabin.shop.core.product.service.ProductService;
 
 import javax.annotation.Resource;
@@ -24,7 +24,7 @@ public class ProductServiceImpl implements ProductService {
     private ProductDao productDao;
 
     @Transactional
-    public Product saveProduct(ProductFormBuilder productFormBuilder) {
+    public Product saveProduct(ProductBuilder productFormBuilder) {
         Long productId = productFormBuilder.getProductId();
         Product product = null;
         if (productId != null) {
@@ -42,6 +42,10 @@ public class ProductServiceImpl implements ProductService {
 
     public Product getProduct(Long productId) {
         return productDao.findOne(productId);
+    }
+
+    public Product getProductByCommodityCode(String commodityCode) {
+        return productDao.getProductByCommodityCode(commodityCode);
     }
 
     public void delete(Long productId) {

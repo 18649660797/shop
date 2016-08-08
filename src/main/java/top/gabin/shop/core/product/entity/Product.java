@@ -6,6 +6,7 @@ package top.gabin.shop.core.product.entity;
 
 import top.gabin.shop.core.constant.ArchiveStatus;
 import top.gabin.shop.core.entity.BasicEntity;
+import top.gabin.shop.core.product.constant.ProductType;
 
 import javax.persistence.*;
 import java.util.List;
@@ -29,6 +30,11 @@ public class Product extends BasicEntity {
     private boolean hidden;
     @Column(name = "TIME_WEIGHT")
     private Long timeWeight;
+    @Column(name = "PRODUCT_TYPE")
+    private String productType;
+    @ManyToOne(targetEntity = ProductBrand.class)
+    @JoinColumn(name = "BRAND_ID")
+    private ProductBrand productBrand;
     @OneToOne(targetEntity = ProductSku.class, mappedBy = "defaultProduct")
     private ProductSku defaultSku;
     @OneToMany(targetEntity = ProductSku.class, mappedBy="product")
@@ -80,5 +86,27 @@ public class Product extends BasicEntity {
 
     public void setAllSkuList(List<ProductSku> allSkuList) {
         this.allSkuList = allSkuList;
+    }
+
+    public ProductType getProductType() {
+        if (productType == null) {
+            return ProductType.NORMAL;
+        }
+        return ProductType.valueOf(productType);
+    }
+
+    public void setProductType(ProductType productType) {
+        if (productType == null) {
+            this.productType = ProductType.NORMAL.name();
+        }
+        this.productType = productType.name();
+    }
+
+    public ProductBrand getProductBrand() {
+        return productBrand;
+    }
+
+    public void setProductBrand(ProductBrand productBrand) {
+        this.productBrand = productBrand;
     }
 }

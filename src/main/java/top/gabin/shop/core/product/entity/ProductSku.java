@@ -5,6 +5,7 @@
 package top.gabin.shop.core.product.entity;
 
 import top.gabin.shop.common.money.Money;
+import top.gabin.shop.core.entity.BasicEntity;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -15,7 +16,7 @@ import java.math.BigDecimal;
  */
 @Entity
 @Table(name = "SHOP_PRODUCT_SKU")
-public class ProductSku {
+public class ProductSku extends BasicEntity {
     @Id
     @Column(name = "ID")
     @TableGenerator(name = "sku_sequences", table = "shop_sequences", pkColumnName = "sequence_name",
@@ -28,6 +29,10 @@ public class ProductSku {
     private String description;
     @Column(name = "SALE_PRICE")
     private BigDecimal salePrice;
+    @Column(name = "COMMODITY_CODE")
+    private String commodityCode;
+    @Column(name = "BOX_SKU")
+    private int boxSku = 1;
     @OneToOne(targetEntity = Product.class)
     @JoinColumn(name = "DEFAULT_PRODUCT_ID")
     private Product defaultProduct;
@@ -86,5 +91,21 @@ public class ProductSku {
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+    public String getCommodityCode() {
+        return commodityCode;
+    }
+
+    public void setCommodityCode(String commodityCode) {
+        this.commodityCode = commodityCode;
+    }
+
+    public int getBoxSku() {
+        return boxSku;
+    }
+
+    public void setBoxSku(int boxSku) {
+        this.boxSku = boxSku;
     }
 }

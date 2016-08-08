@@ -14,7 +14,7 @@ import java.math.BigDecimal;
  *
  * @author linjiabin on  16/8/4
  */
-public class ProductForm implements ProductFormBuilder {
+public class ProductForm implements ProductBuilder {
     private Long productId;
     private String skuName;
     private BigDecimal salePrice;
