@@ -18,9 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 import top.gabin.shop.core.jpa.criteria.query.dto.PageDTO;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -238,6 +236,24 @@ public class RenderUtils {
         response.addHeader(PRAGMA, "no-cache");
         // Http 1.1 header
         response.setHeader(CACHE_CONTROL, "no-cache, no-store, max-age=0");
+    }
+
+    public static void downloadFile(HttpServletResponse response, String realPath, String fileName) {
+        try {
+            response.setContentType("application/x-msdownload");
+            response.setHeader("Content-Disposition", "attachment; filename=" + new String(fileName.getBytes("UTF-8"), "ISO8859-1"));
+            InputStream in = new FileInputStream(new File(realPath));
+            OutputStream os = response.getOutputStream();
+            byte[] buf = new byte[1024];
+            int len ;
+            while ((len=in.read(buf))!=-1){
+                os.write(buf,0,len);
+            }
+            os.flush();
+            os.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

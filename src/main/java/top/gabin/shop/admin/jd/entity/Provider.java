@@ -1,8 +1,8 @@
 /**
  * Copyright (c) 2016 云智盛世
- * Created with ProductBrand.
+ * Created with Provider.
  */
-package top.gabin.shop.core.product.entity;
+package top.gabin.shop.admin.jd.entity;
 
 import top.gabin.shop.core.entity.BasicEntity;
 
@@ -10,16 +10,16 @@ import javax.persistence.*;
 
 /**
  *
- * @author linjiabin on  16/8/4
+ * @author linjiabin on  16/8/9
  */
 @Entity
-@Table(name = "SHOP_PRODUCT_BRAND")
-public class ProductBrand extends BasicEntity {
+@Table(name = "SHOP_WAREHOUSE")
+public class Provider extends BasicEntity {
     @Id
     @Column(name = "ID")
-    @TableGenerator(name = "product_brand_sequences", table = "SHOP_SEQUENCES", pkColumnName = "sequence_name",
+    @TableGenerator(name = "warehouse_sequences", table = "SHOP_SEQUENCES", pkColumnName = "sequence_name",
             valueColumnName = "sequence_next_hi_value", initialValue = 20, allocationSize = 50)
-    @GeneratedValue(generator = "product_brand_sequences", strategy = GenerationType.TABLE)
+    @GeneratedValue(generator = "warehouse_sequences", strategy = GenerationType.TABLE)
     private Long id;
     @Column(name = "NAME")
     private String name;

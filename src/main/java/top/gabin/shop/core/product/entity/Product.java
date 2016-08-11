@@ -20,7 +20,7 @@ import java.util.List;
 public class Product extends BasicEntity {
     @Id
     @Column(name = "ID")
-    @TableGenerator(name = "product_sequences", table = "shop_sequences", pkColumnName = "sequence_name",
+    @TableGenerator(name = "product_sequences", table = "SHOP_SEQUENCES", pkColumnName = "sequence_name",
             valueColumnName = "sequence_next_hi_value", initialValue = 20, allocationSize = 50)
     @GeneratedValue(generator = "product_sequences", strategy = GenerationType.TABLE)
     private Long id;

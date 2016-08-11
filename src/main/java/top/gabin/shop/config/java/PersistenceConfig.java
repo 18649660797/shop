@@ -41,8 +41,9 @@ public class PersistenceConfig {
     private Environment env;
 
     @Bean
-    public AbstractPlatformTransactionManager transactionManager() {
+    public JpaTransactionManager transactionManager() {
         JpaTransactionManager jpaTransactionManager = new JpaTransactionManager(entityManagerFactory());
+        jpaTransactionManager.setEntityManagerFactory(entityManagerFactory());
         return jpaTransactionManager;
     }
 

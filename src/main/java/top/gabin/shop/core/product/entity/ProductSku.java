@@ -19,7 +19,7 @@ import java.math.BigDecimal;
 public class ProductSku extends BasicEntity {
     @Id
     @Column(name = "ID")
-    @TableGenerator(name = "sku_sequences", table = "shop_sequences", pkColumnName = "sequence_name",
+    @TableGenerator(name = "sku_sequences", table = "SHOP_SEQUENCES", pkColumnName = "sequence_name",
             valueColumnName = "sequence_next_hi_value", initialValue = 20, allocationSize = 50)
     @GeneratedValue(generator = "sku_sequences", strategy = GenerationType.TABLE)
     private Long id;

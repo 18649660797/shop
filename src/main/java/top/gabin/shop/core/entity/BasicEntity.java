@@ -4,9 +4,7 @@
  */
 package top.gabin.shop.core.entity;
 
-import javax.persistence.Column;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -14,7 +12,7 @@ import java.util.Date;
  * 基础类,存放基础属性
  * @author linjiabin on  16/8/4
  */
-public class BasicEntity implements Serializable {
+public abstract class BasicEntity implements Serializable {
     @Column(name = "CREATE_TIME")
     private Date createTime;
     @Column(name = "UPDATE_TIME")

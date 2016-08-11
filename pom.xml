@@ -22,7 +22,7 @@
         <spring.version>4.2.4.RELEASE</spring.version>
         <spring.security.version>4.0.3.RELEASE</spring.security.version>
         <hibernate.version>4.3.11.Final</hibernate.version>
-        <httpPort>8080</httpPort>
+        <httpPort>9090</httpPort>
     </properties>
     <dependencies>
         <!-- To set up an application with a database, change the artifactId below to

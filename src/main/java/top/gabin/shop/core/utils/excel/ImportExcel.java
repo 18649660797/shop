@@ -17,6 +17,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -229,6 +231,7 @@ public class ImportExcel {
      * @param groups 导入分组
      */
     public <E> List<E> getDataList(Class<E> cls, int... groups) throws InstantiationException, IllegalAccessException {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         List<Object[]> annotationList = new ArrayList<Object[]>();
         // Get annotation field
         Field[] fs = cls.getDeclaredFields();
@@ -332,15 +335,45 @@ public class ImportExcel {
                                 val = String.valueOf(val.toString());
                             }
                         } else if (valType == Integer.class) {
-                            val = Double.valueOf(val.toString()).intValue();
+                            if (StringUtils.isBlank(val.toString())) {
+                                val = 0;
+                            } else {
+                                val = Double.valueOf(val.toString()).intValue();
+                            }
                         } else if (valType == Long.class) {
-                            val = Double.valueOf(val.toString()).longValue();
+                            if (StringUtils.isBlank(val.toString())) {
+                                val = 0D;
+                            } else {
+                                val = Double.valueOf(val.toString()).longValue();
+                            }
                         } else if (valType == Double.class) {
-                            val = Double.valueOf(val.toString());
+                            if (StringUtils.isBlank(val.toString())) {
+                                val = 0D;
+                            } else {
+                                val = Double.valueOf(val.toString());
+                            }
                         } else if (valType == Float.class) {
-                            val = Float.valueOf(val.toString());
+                            if (StringUtils.isBlank(val.toString())) {
+                                val = 0F;
+                            } else {
+                                val = Float.valueOf(val.toString());
+                            }
                         } else if (valType == Date.class) {
-                            val = DateUtil.getJavaDate((Double.parseDouble(val.toString())));
+                            if (StringUtils.isBlank(val.toString())) {
+                                val = null;
+                            } else {
+                                try {
+                                    val = DateUtil.getJavaDate((Double.parseDouble(val.toString())));
+                                } catch (Exception ee) {
+                                    val = simpleDateFormat.parse(val.toString());
+                                }
+                            }
+                        } else if (valType == BigDecimal.class) {
+                            if (StringUtils.isBlank(val.toString())) {
+                                val = BigDecimal.ZERO;
+                            } else {
+                                val = new BigDecimal(val.toString());
+                            }
                         } else {
                             if (ef.fieldType() != Class.class) {
                                 val = ef.fieldType().getMethod("getValue", String.class).invoke(null, val.toString());
@@ -351,7 +384,6 @@ public class ImportExcel {
                         }
                     } catch (Exception ex) {
                         log.info("Get cell value [" + i + "," + column + "] error: " + ex.toString());
-                        val = null;
                         continue outer;
                     }
                     // set entity value

@@ -61,7 +61,41 @@
                         tbar : {
                             items : [
                                 {text : '<i class="icon-plus"></i>新建',btnCls : 'button button-small',handler:function(){alert('新建');}},
-                                {text : '<i class="icon-edit"></i>导入',btnCls : 'button button-small',handler:function(){alert('编辑');}},
+                                {text : '<i class="icon-edit"></i>导入',btnCls : 'button button-small',handler:function(){
+                                    var dialog = new top.BUI.Overlay.Dialog({
+                                        title: '导入采购单',
+                                        width:430,
+                                        height:150,
+                                        closeAction: "destroy",
+                                        loader : {
+                                            url : '/admin/jd/stockProduct/import',
+                                            autoLoad : false, //不自动加载
+                                            lazyLoad : false, //不延迟加载
+                                        },
+                                        mask:true,
+                                        success: function() {
+                                            top.$.ajaxFileUpload({
+                                                url : '/admin/jd/purchaseOrder/import',
+                                                secureuri: false,
+                                                fileElementId: "file",
+                                                dataType : 'json',
+                                                method : 'get',
+                                                success: function (data) {
+                                                    var w = top.window.open("/admin/jd/purchaseOrder/analysis")
+                                                    w.onclose =  function() {
+                                                        store.load();
+                                                    }
+                                                },
+                                                error: function (data, status, e) {
+
+                                                }
+                                            });
+                                            this.close();
+                                        }
+                                    });
+                                    dialog.show();
+                                    dialog.get('loader').load()
+                                }},
                                 {text : '<i class="icon-remove"></i>删除',btnCls : 'button button-small',handler : delFunction}
                             ]
                         },
