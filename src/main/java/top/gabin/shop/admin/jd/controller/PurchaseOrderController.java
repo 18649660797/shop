@@ -89,17 +89,33 @@ public class PurchaseOrderController {
             List<PurchaseOrderImportForm> dataList = (List<PurchaseOrderImportForm>) session.getAttribute(IMPORT_DATA);
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmSS");
             String path = sdf.format(new Date());
-            String servletPath = "download/zip/" + path;
+            String servletPath = "download/tmp/" + path;
             jdPurchaseOrderService.analysis(dataList, servletPath);
             zipDownload(servletPath, path, response);
+            clearFile(new File("download/zip"));
+            clearFile(new File("download/tmp"));
+            new File("download/zip").mkdir();
+            new File("download/tmp").mkdir();
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("导出Excel文件出错", e);
         }
     }
 
+    private void clearFile(File file) {
+        if (file.isDirectory()) {
+            File[] files = file.listFiles();
+            for (File f : files) {
+                clearFile(f);
+            }
+            file.delete();
+        } else {
+            file.delete();
+        }
+    }
+
     public void zipDownload(String servletFilePath, String fileName, HttpServletResponse response) throws Exception {
-        String zipFileName = servletFilePath + "/" + fileName + ".zip"; //打包后文件名字
+        String zipFileName = "download/zip/" + fileName + ".zip"; //打包后文件名字
         zip(zipFileName, new File(servletFilePath));
         RenderUtils.downloadFile(response, zipFileName, fileName + ".zip");
     }

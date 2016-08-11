@@ -72,6 +72,22 @@ public class JdPurchaseOrderServiceImpl implements JdPurchaseOrderService {
                 sheet.setColumnWidth(6, 256 * 15);
                 String provider = null;
                 int j = 0;
+                int totalBoxCount = 0;
+                for (PurchaseOrderImportForm purchaseOrderImportForm : purchaseOrderImportForms) {
+                    Integer itemCount = purchaseOrderImportForm.getItemCount();
+                    if (itemCount <= 0) {
+                        continue;
+                    }
+                    int boxSku = 0;
+                    Product product = productDao.getProductByCommodityCode(purchaseOrderImportForm.getCommodityCode());
+                    if (product != null) {
+                        ProductSku defaultSku = product.getDefaultSku();
+                        boxSku = defaultSku.getBoxSku();
+                    }
+                    int boxCount = (int) Math.ceil(itemCount * 1D / boxSku);
+                    totalBoxCount += boxCount;
+
+                }
                 HSSFRow row3 = createRow(sheet, j++);
                 setValue(row3, 0, "采购单号");
                 setValue(row3, 1, "总箱数");
@@ -80,6 +96,7 @@ public class JdPurchaseOrderServiceImpl implements JdPurchaseOrderService {
                 setValue(row3, 4, "商品名称");
                 setValue(row3, 5, "数量");
                 setValue(row3, 6, "目的地");
+                int num = 1;
                 for (PurchaseOrderImportForm purchaseOrderImportForm : purchaseOrderImportForms) {
                     Integer itemCount = purchaseOrderImportForm.getItemCount();
                     if (itemCount <= 0) {
@@ -101,14 +118,14 @@ public class JdPurchaseOrderServiceImpl implements JdPurchaseOrderService {
                             provider = purchaseOrderImportForm.getProvider();
                         }
                         setValue(row, 0, key);
-                        setValue(row, 1, boxCount);
-                        setValue(row, 2, i);
+                        setValue(row, 1, totalBoxCount);
+                        setValue(row, 2, num++);
                         setValue(row, 3, purchaseOrderImportForm.getCommodityCode());
                         setValue(row, 4, skuName);
                         if (i == boxCount && finalBoxQuantity != 0) {
-                            setValue(row, 5, itemCount);
+                            setValue(row, 5, finalBoxQuantity);
                         } else {
-                            setValue(row, 5, itemCount);
+                            setValue(row, 5, boxSku);
                         }
                         setValue(row, 6, provider);
                     }
