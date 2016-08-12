@@ -111,7 +111,7 @@ public class JdPurchaseOrderServiceImpl implements JdPurchaseOrderService {
                         skuName = defaultSku.getName();
                     }
                     int boxCount = (int) Math.ceil(itemCount * 1D / boxSku);
-                    int finalBoxQuantity = itemCount % boxCount;
+                    int finalBoxQuantity = itemCount % boxSku;
                     for (int i = 1; i <= boxCount; i++) {
                         HSSFRow row = createRow(sheet, j++);
                         if (provider == null) {
