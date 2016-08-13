@@ -12,7 +12,7 @@ import java.util.Date;
  * 基础类,存放基础属性
  * @author linjiabin on  16/8/4
  */
-public abstract class BasicEntity implements Serializable {
+public class BasicEntity implements Serializable {
     @Column(name = "CREATE_TIME")
     private Date createTime;
     @Column(name = "UPDATE_TIME")

@@ -4,6 +4,8 @@
  */
 package top.gabin.shop.admin.jd.form;
 
+import org.apache.commons.lang3.time.DateUtils;
+import top.gabin.shop.common.money.Money;
 import top.gabin.shop.core.utils.excel.annotation.ExcelField;
 
 import java.io.Serializable;
@@ -27,8 +29,8 @@ public class PurchaseOrderImportForm implements Serializable {
     private String skuName;
     @ExcelField(value = "attribute", title = "订单属性")
     private String attribute;
-    @ExcelField(value = "provider", title = "分配机构")
-    private String provider;
+    @ExcelField(value = "city", title = "分配机构")
+    private String city;
     @ExcelField(value = "warehouseName", title = "仓库")
     private String warehouseName;
     @ExcelField(value = "detailAddress", title = "详细地址")
@@ -51,9 +53,8 @@ public class PurchaseOrderImportForm implements Serializable {
     private String buyer;
     @ExcelField(value = "itemCount", title = "订购时间")
     private Date orderTime;
-    @ExcelField(value = "overdueDate", title = "入库到期时间")
-    private String overdueDate;
-
+//    @ExcelField(value = "overdueDate", title = "入库到期时间")
+//    private Date overdueDate;
     public String getOrderNumber() {
         return orderNumber;
     }
@@ -102,12 +103,12 @@ public class PurchaseOrderImportForm implements Serializable {
         this.attribute = attribute;
     }
 
-    public String getProvider() {
-        return provider;
+    public String getCity() {
+        return city;
     }
 
-    public void setProvider(String provider) {
-        this.provider = provider;
+    public void setCity(String city) {
+        this.city = city;
     }
 
     public String getWarehouseName() {
@@ -198,11 +199,11 @@ public class PurchaseOrderImportForm implements Serializable {
         this.orderTime = orderTime;
     }
 
-    public String getOverdueDate() {
-        return overdueDate;
+    public Date getOverdueDate() {
+        if (orderTime == null) {
+            return null;
+        }
+        return DateUtils.addDays(orderTime, 14);
     }
 
-    public void setOverdueDate(String overdueDate) {
-        this.overdueDate = overdueDate;
-    }
 }

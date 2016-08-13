@@ -1,9 +1,6 @@
-package top.gabin.shop.core.jpa.criteria.query.callback;
+package top.gabin.shop.core.jpa.criteria.callback;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import java.util.List;
 
 /**
@@ -12,4 +9,5 @@ import java.util.List;
  */
 public interface CriteriaCallBack {
     List<Predicate> callback(CriteriaBuilder criteriaBuilder, CriteriaQuery query, Root root);
+    List<Predicate> callback(CriteriaBuilder criteriaBuilder, CriteriaDelete criteriaDelete, Root root);
 }

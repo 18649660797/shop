@@ -301,6 +301,10 @@ public class ImportExcel {
             int column = 0;
             Row row = this.getRow(i);
             StringBuilder sb = new StringBuilder();
+            Object firstVal = this.getCellValue(row, 0);
+            if (firstVal == null || StringUtils.isBlank(firstVal.toString())) {
+                continue;
+            }
             for (Object[] os : annotationList) {
                 Object val = this.getCellValue(row, column++);
                 if (val != null) {

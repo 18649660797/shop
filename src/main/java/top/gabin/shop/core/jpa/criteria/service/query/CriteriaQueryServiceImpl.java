@@ -2,13 +2,13 @@
  * Copyright (c) 2015 云智盛世
  * Created with QueryServiceImpl.
  */
-package top.gabin.shop.core.jpa.criteria.query.service;
+package top.gabin.shop.core.jpa.criteria.service.query;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
-import top.gabin.shop.core.jpa.criteria.query.condition.CriteriaCondition;
-import top.gabin.shop.core.jpa.criteria.query.dto.PageDTO;
-import top.gabin.shop.core.jpa.criteria.query.uil.CriteriaQueryUtils;
+import top.gabin.shop.core.jpa.criteria.condition.CriteriaCondition;
+import top.gabin.shop.core.jpa.criteria.dto.PageDTO;
+import top.gabin.shop.core.jpa.criteria.uil.CriteriaQueryUtils;
 import top.gabin.shop.core.utils.RenderUtils;
 
 import javax.persistence.EntityManager;

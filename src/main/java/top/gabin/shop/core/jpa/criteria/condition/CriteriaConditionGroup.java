@@ -2,7 +2,7 @@
  * Copyright (c) 2015 云智盛世
  * Created with CriteriaConditionGroup.
  */
-package top.gabin.shop.core.jpa.criteria.query.condition;
+package top.gabin.shop.core.jpa.criteria.condition;
 
 import java.util.ArrayList;
 import java.util.List;

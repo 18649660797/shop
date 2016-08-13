@@ -1,4 +1,4 @@
-package top.gabin.shop.core.jpa.criteria.query.constant;
+package top.gabin.shop.core.jpa.criteria.constant;
 
 /**
  * 查询条件枚举类型

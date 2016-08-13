@@ -2,11 +2,11 @@
  * Copyright (c) 2015 云智盛世
  * Created with CriteriaCondition.
  */
-package top.gabin.shop.core.jpa.criteria.query.condition;
+package top.gabin.shop.core.jpa.criteria.condition;
 
 
 
-import top.gabin.shop.core.jpa.criteria.query.callback.CriteriaCallBack;
+import top.gabin.shop.core.jpa.criteria.callback.CriteriaCallBack;
 
 import java.util.Map;
 

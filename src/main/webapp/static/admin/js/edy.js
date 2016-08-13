@@ -27,6 +27,15 @@
         format: {
             renderStatus: function(val, row) {
                 return val && val.label || val || "";
+            },
+            renderMoney: function (value, rowObj) {
+                if (!value) {
+                    return "--";
+                }
+                if (!isNaN(value)) {
+                    return "￥" + (value || 0);
+                }
+                return "￥" + (value.amount || 0);
             }
         }
     }

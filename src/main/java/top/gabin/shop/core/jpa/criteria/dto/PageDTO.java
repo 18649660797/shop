@@ -1,4 +1,4 @@
-package top.gabin.shop.core.jpa.criteria.query.dto;
+package top.gabin.shop.core.jpa.criteria.dto;
 
 import java.util.List;
 import java.util.Map;

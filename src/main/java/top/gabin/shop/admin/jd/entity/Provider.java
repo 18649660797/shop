@@ -13,16 +13,18 @@ import javax.persistence.*;
  * @author linjiabin on  16/8/9
  */
 @Entity
-@Table(name = "SHOP_WAREHOUSE")
+@Table(name = "SHOP_PROVIDER")
 public class Provider extends BasicEntity {
     @Id
     @Column(name = "ID")
-    @TableGenerator(name = "warehouse_sequences", table = "SHOP_SEQUENCES", pkColumnName = "sequence_name",
+    @TableGenerator(name = "provider_sequences", table = "SHOP_SEQUENCES", pkColumnName = "sequence_name",
             valueColumnName = "sequence_next_hi_value", initialValue = 20, allocationSize = 50)
-    @GeneratedValue(generator = "warehouse_sequences", strategy = GenerationType.TABLE)
+    @GeneratedValue(generator = "provider_sequences", strategy = GenerationType.TABLE)
     private Long id;
     @Column(name = "NAME")
     private String name;
+    @Column(name = "CN")
+    private String cn;
 
     public Long getId() {
         return id;
@@ -38,5 +40,13 @@ public class Provider extends BasicEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getCn() {
+        return cn;
+    }
+
+    public void setCn(String cn) {
+        this.cn = cn;
     }
 }

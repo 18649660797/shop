@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-import top.gabin.shop.core.jpa.criteria.query.service.CriteriaQueryService;
+import top.gabin.shop.core.jpa.criteria.service.query.CriteriaQueryService;
 import top.gabin.shop.core.product.entity.Product;
 import top.gabin.shop.core.product.service.ProductService;
 

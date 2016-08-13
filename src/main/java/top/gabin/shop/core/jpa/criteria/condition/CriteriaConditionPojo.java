@@ -2,10 +2,10 @@
  * Copyright (c) 2015 云智盛世
  * Created with CriteriaConditionPojo.
  */
-package top.gabin.shop.core.jpa.criteria.query.condition;
+package top.gabin.shop.core.jpa.criteria.condition;
 
 
-import top.gabin.shop.core.jpa.criteria.query.constant.CriteriaOperation;
+import top.gabin.shop.core.jpa.criteria.constant.CriteriaOperation;
 
 /**
  * 查询条件dto

@@ -1,9 +1,9 @@
-package top.gabin.shop.core.jpa.criteria.query.service;
+package top.gabin.shop.core.jpa.criteria.service.query;
 
 
 
-import top.gabin.shop.core.jpa.criteria.query.condition.CriteriaCondition;
-import top.gabin.shop.core.jpa.criteria.query.dto.PageDTO;
+import top.gabin.shop.core.jpa.criteria.condition.CriteriaCondition;
+import top.gabin.shop.core.jpa.criteria.dto.PageDTO;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;

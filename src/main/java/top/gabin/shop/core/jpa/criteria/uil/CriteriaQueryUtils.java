@@ -2,15 +2,15 @@
  * Copyright (c) 2015 云智盛世
  * Created with CriteriaQueryUtils.
  */
-package top.gabin.shop.core.jpa.criteria.query.uil;
+package top.gabin.shop.core.jpa.criteria.uil;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.web.util.WebUtils;
-import top.gabin.shop.core.jpa.criteria.query.condition.CriteriaCondition;
-import top.gabin.shop.core.jpa.criteria.query.condition.CriteriaConditionGroup;
-import top.gabin.shop.core.jpa.criteria.query.condition.CriteriaConditionPojo;
-import top.gabin.shop.core.jpa.criteria.query.constant.CriteriaOperation;
+import top.gabin.shop.core.jpa.criteria.condition.CriteriaCondition;
+import top.gabin.shop.core.jpa.criteria.condition.CriteriaConditionGroup;
+import top.gabin.shop.core.jpa.criteria.condition.CriteriaConditionPojo;
+import top.gabin.shop.core.jpa.criteria.constant.CriteriaOperation;
 
 import javax.persistence.criteria.*;
 import javax.servlet.http.HttpServletRequest;
