@@ -8,6 +8,6 @@ import java.io.Serializable;
  * @author linjiabin on  16/8/4
  */
 public interface ProductBuilder extends Serializable {
-    Long getProductId();
+    Long getId();
     Product build(Product product);
 }

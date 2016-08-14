@@ -11,11 +11,17 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import top.gabin.shop.core.jpa.criteria.service.query.CriteriaQueryService;
+import top.gabin.shop.core.jpa.criteria.uil.CriteriaQueryUtils;
 import top.gabin.shop.core.product.entity.Product;
+import top.gabin.shop.core.product.entity.ProductBrand;
+import top.gabin.shop.core.product.form.ProductEditForm;
+import top.gabin.shop.core.product.service.ProductBrandService;
 import top.gabin.shop.core.product.service.ProductService;
+import top.gabin.shop.core.utils.RenderUtils;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -27,6 +33,8 @@ import java.util.Map;
 public class ProductBasicController {
     @Resource
     private ProductService productService;
+    @Resource
+    private ProductBrandService brandService;
     @Resource(name = "criteriaQueryService")
     private CriteriaQueryService queryService;
     private final static String DIR = "admin/product/basic/";
@@ -46,6 +54,8 @@ public class ProductBasicController {
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
     public ModelAndView viewEdit(@PathVariable(value = "id") Long id) {
         ModelAndView modelAndView = new ModelAndView(DIR + "edit");
+        List<ProductBrand> brandList = brandService.findAll();
+        modelAndView.addObject("brandList", brandList);
         if (id != null) {
             Product product = productService.getProduct(id);
             if (product != null) {
@@ -55,6 +65,19 @@ public class ProductBasicController {
         return modelAndView;
     }
 
+    @RequestMapping(value = "/edit/{id}", method = RequestMethod.POST)
+    @ResponseBody
+    public Map edit(@PathVariable(value = "id") Long id, ProductEditForm productEditForm) {
+        productService.saveProduct(productEditForm);
+        return RenderUtils.getSuccessMap();
+    }
 
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
+    @ResponseBody
+    public Map delete(HttpServletRequest request) {
+        List<Product> productList = queryService.query(Product.class, CriteriaQueryUtils.parseCondition(request));
+        productService.delete(productList);
+        return RenderUtils.getSuccessMap();
+    }
 
 }

@@ -15,13 +15,9 @@ import java.math.BigDecimal;
  * @author linjiabin on  16/8/4
  */
 public class ProductForm implements ProductBuilder {
-    private Long productId;
+    private Long id;
     private String skuName;
     private BigDecimal salePrice;
-
-    public void setProductId(Long productId) {
-        this.productId = productId;
-    }
 
     public String getSkuName() {
         return skuName;
@@ -39,8 +35,12 @@ public class ProductForm implements ProductBuilder {
         this.salePrice = salePrice;
     }
 
-    public Long getProductId() {
-        return productId;
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Product build(Product product) {

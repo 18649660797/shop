@@ -4,7 +4,15 @@
  */
 package top.gabin.shop.core.entity;
 
-import javax.persistence.*;
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.FilterDef;
+import org.hibernate.annotations.Filters;
+import top.gabin.shop.web.constant.HibernateFilter;
+
+import javax.persistence.Column;
+import javax.persistence.MappedSuperclass;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -12,13 +20,18 @@ import java.util.Date;
  * 基础类,存放基础属性
  * @author linjiabin on  16/8/4
  */
+// hibernate过滤器,在适当的地方会加上过滤条件
+@FilterDef(name = HibernateFilter.DELETE_STATUS_FILTER)
+@Filters({ @Filter(name = HibernateFilter.DELETE_STATUS_FILTER, condition = HibernateFilter.DELETE_STATUS_MP_NAME + " = 0") })
+// 将所有注解映射到子类去,父类不会产生新表
+@MappedSuperclass
 public class BasicEntity implements Serializable {
     @Column(name = "CREATE_TIME")
-    private Date createTime;
+    protected Date createTime;
     @Column(name = "UPDATE_TIME")
-    private Date updateTime;
+    protected Date updateTime;
     @Column(name = "DELETE_STATUS")
-    private boolean deleteStatus = false;
+    protected Boolean deleteStatus = false;
     @PrePersist
     private void prePersist() {
         createTime = updateTime = new Date();

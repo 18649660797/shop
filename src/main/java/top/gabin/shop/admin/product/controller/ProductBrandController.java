@@ -11,11 +11,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import top.gabin.shop.core.jpa.criteria.service.query.CriteriaQueryService;
+import top.gabin.shop.core.jpa.criteria.uil.CriteriaQueryUtils;
 import top.gabin.shop.core.product.entity.ProductBrand;
+import top.gabin.shop.core.product.form.ProductBrandForm;
 import top.gabin.shop.core.product.service.ProductBrandService;
+import top.gabin.shop.core.utils.RenderUtils;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -47,11 +51,27 @@ public class ProductBrandController {
     public ModelAndView viewEdit(@PathVariable(value = "id") Long id) {
         ModelAndView modelAndView = new ModelAndView(DIR + "edit");
         if (id != null) {
-            ProductBrand productBrand = productBrandService.getProductBrand(id);
+            ProductBrand productBrand = productBrandService.get(id);
             if (productBrand != null) {
                 modelAndView.addObject("product", productBrand);
             }
         }
         return modelAndView;
     }
+
+    @RequestMapping(value = "/edit/{id}", method = RequestMethod.POST)
+    @ResponseBody
+    public Map edit(@PathVariable(value = "id") Long id, ProductBrandForm productBrandForm) {
+        productBrandService.saveProductBrand(productBrandForm);
+        return RenderUtils.getSuccessMap();
+    }
+
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
+    @ResponseBody
+    public Map edit(HttpServletRequest request) {
+        List<ProductBrand> productBrandList = queryService.query(ProductBrand.class, CriteriaQueryUtils.parseCondition(request));
+        productBrandService.delete(productBrandList);
+        return RenderUtils.getSuccessMap();
+    }
+
 }

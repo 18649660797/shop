@@ -5,6 +5,7 @@
 package top.gabin.shop.admin.jd.service;
 
 import top.gabin.shop.admin.jd.entity.PurchaseOrder;
+import top.gabin.shop.admin.jd.form.PreOrderImportForm;
 import top.gabin.shop.admin.jd.form.PurchaseOrderImportForm;
 
 import java.io.IOException;
@@ -18,5 +19,6 @@ public interface JdPurchaseOrderService {
     void analysis(List<PurchaseOrderImportForm> dataList, String servletPath) throws IOException;
     void importOrder(List<PurchaseOrderImportForm> dataList);
     void delete(List<PurchaseOrder> purchaseOrderList);
-    void excel(String servletPath);
+    void excel(List<PurchaseOrder> purchaseOrderList, String servletPath);
+    void importPreOrder(List<PreOrderImportForm> dataList);
 }

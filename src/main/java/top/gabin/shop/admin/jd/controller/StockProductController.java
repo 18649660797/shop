@@ -16,7 +16,9 @@ import top.gabin.shop.admin.jd.form.ProductImportForm;
 import top.gabin.shop.admin.jd.service.JdStockProductService;
 import top.gabin.shop.core.jpa.criteria.dto.PageDTO;
 import top.gabin.shop.core.jpa.criteria.service.query.CriteriaQueryService;
+import top.gabin.shop.core.jpa.criteria.uil.CriteriaQueryUtils;
 import top.gabin.shop.core.product.entity.Product;
+import top.gabin.shop.core.product.service.ProductService;
 import top.gabin.shop.core.utils.RenderUtils;
 import top.gabin.shop.core.utils.excel.ImportExcel;
 import top.gabin.shop.core.utils.json.JsonUtils;
@@ -40,6 +42,8 @@ public class StockProductController {
     private CriteriaQueryService queryService;
     @Resource
     private JdStockProductService jdStockProductService;
+    @Resource
+    private ProductService productService;
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public ModelAndView viewList() {
@@ -51,6 +55,15 @@ public class StockProductController {
     @ResponseBody
     public Map dataList(HttpServletRequest request) {
         return queryService.queryPage(Product.class, request, "id,defaultSku.name name,defaultSku.boxSku boxSku,defaultSku.commodityCode commodityCode,productBrand.name brandName");
+    }
+
+
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
+    @ResponseBody
+    public Map delete(HttpServletRequest request) {
+        List<Product> productList = queryService.query(Product.class, CriteriaQueryUtils.parseCondition(request));
+        productService.delete(productList);
+        return RenderUtils.getSuccessMap();
     }
 
     @RequestMapping(value = "/import", method = RequestMethod.GET)

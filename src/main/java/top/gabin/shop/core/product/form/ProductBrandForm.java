@@ -30,10 +30,6 @@ public class ProductBrandForm implements ProductBrandBuilder {
         this.name = name;
     }
 
-    public Long getProductBrandId() {
-        return id;
-    }
-
     public ProductBrand build(ProductBrand productBrand) {
         productBrand.setName(name);
         return productBrand;

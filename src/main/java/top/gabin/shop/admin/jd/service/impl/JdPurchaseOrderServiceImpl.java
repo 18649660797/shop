@@ -21,6 +21,7 @@ import top.gabin.shop.admin.jd.entity.Provider;
 import top.gabin.shop.admin.jd.entity.PurchaseOrder;
 import top.gabin.shop.admin.jd.entity.PurchaseOrderItem;
 import top.gabin.shop.admin.jd.entity.WareHouse;
+import top.gabin.shop.admin.jd.form.PreOrderImportForm;
 import top.gabin.shop.admin.jd.form.PurchaseOrderImportForm;
 import top.gabin.shop.admin.jd.service.JdPurchaseOrderService;
 import top.gabin.shop.common.money.Money;
@@ -429,7 +430,6 @@ public class JdPurchaseOrderServiceImpl implements JdPurchaseOrderService {
         List<PurchaseOrderItem> purchaseOrderItemList = new ArrayList<PurchaseOrderItem>();
         for (String orderNumber : group.keySet()) {
             List<PurchaseOrderImportForm> purchaseOrderImportForms = group.get(orderNumber);
-            System.out.println("____" + purchaseOrderImportForms.size());
             PurchaseOrder purchaseOrder = purchaseOrderDao.getByOrderNumber(orderNumber);
             if (purchaseOrder != null) {
                 continue;
@@ -514,20 +514,39 @@ public class JdPurchaseOrderServiceImpl implements JdPurchaseOrderService {
         purchaseOrderDao.delete(purchaseOrderList);
     }
 
-    public void excel(String servletPath) {
+    public void excel(List<PurchaseOrder> purchaseOrderList, String servletPath) {
         new File(servletPath).mkdir();
-        excelBox(servletPath);
-        excelOrder(servletPath);
+        excelBox(purchaseOrderList, servletPath);
+        excelOrder(purchaseOrderList, servletPath);
     }
 
-    private void excelBox(String servletPath) {
+    @Transactional
+    public void importPreOrder(List<PreOrderImportForm> dataList) {
+        List<String> orderNumberList = new ArrayList<String>();
+        Map<String, PreOrderImportForm> preOrderImportFormMap = new HashMap<String, PreOrderImportForm>();
+        for (PreOrderImportForm preOrderImportForm : dataList) {
+            String orderNumber = preOrderImportForm.getOrderNumber();
+            orderNumber = StringUtils.trim(orderNumber);
+            orderNumberList.add(orderNumber);
+            preOrderImportFormMap.put(orderNumber, preOrderImportForm);
+        }
+        List<PurchaseOrder> purchaseOrderList = purchaseOrderDao.findByOrderNumber(orderNumberList);
+        for (PurchaseOrder purchaseOrder : purchaseOrderList) {
+            String orderNumber = purchaseOrder.getOrderNumber();
+            if (preOrderImportFormMap.containsKey(orderNumber)) {
+                purchaseOrder.setRemark(preOrderImportFormMap.get(orderNumber).getRemark());
+                purchaseOrderDao.save(purchaseOrder);
+            }
+        }
+    }
+
+    private void excelBox(List<PurchaseOrder> purchaseOrderList, String servletPath) {
         commonFontSize = (short) 11;
         FileOutputStream fileOut = null;
         servletPath = servletPath + "/装箱明细";
         new File(servletPath).mkdir();
         servletPath += "/";
         try {
-            List<PurchaseOrder> purchaseOrderList = purchaseOrderDao.findAll();
             for (PurchaseOrder purchaseOrder : purchaseOrderList) {
                 HSSFWorkbook hssfWorkbook = new HSSFWorkbook();
                 HSSFFont fontAt = hssfWorkbook.getFontAt((short) 0);
@@ -620,14 +639,13 @@ public class JdPurchaseOrderServiceImpl implements JdPurchaseOrderService {
     }
 
 
-    private void excelOrder(String servletPath) {
+    private void excelOrder(List<PurchaseOrder> purchaseOrderList, String servletPath) {
         FileOutputStream fileOut = null;
         commonFontSize = (short) 12;
         servletPath = servletPath + "/送货单";
         new File(servletPath).mkdir();
         try {
             servletPath += "/";
-            List<PurchaseOrder> purchaseOrderList = purchaseOrderDao.findAll();
             for (PurchaseOrder purchaseOrder : purchaseOrderList) {
                 HSSFWorkbook hssfWorkbook = new HSSFWorkbook();
                 HSSFSheet sheet = hssfWorkbook.createSheet("sheet1");
@@ -731,14 +749,15 @@ public class JdPurchaseOrderServiceImpl implements JdPurchaseOrderService {
                 setValue(rowFoot, 3, totalCount);
                 sheet.addMergedRegion(new CellRangeAddress(j, j, 0, 3));
                 HSSFRow row5 = createRow(sheet, j);
-                setValue(row5, 0, "预约成功！请牢记预约单号：16081400441" +
-                        "\r送货时间：2016-08-14 15:00-17:30" +
-                        "\r\r" +
-                        "机构库房：北京-百货服装仓A1库（新）" +
-                        "\r\r" +
-                        "库房地址：北京市通州区张家湾镇张辛庄村东方化工厂南门200米" +
-                        "\r\r" +
-                        "库房电话：57835260-8030");
+//                setValue(row5, 0, "预约成功！请牢记预约单号：16081400441" +
+//                        "\r送货时间：2016-08-14 15:00-17:30" +
+//                        "\r\r" +
+//                        "机构库房：北京-百货服装仓A1库（新）" +
+//                        "\r\r" +
+//                        "库房地址：北京市通州区张家湾镇张辛庄村东方化工厂南门200米" +
+//                        "\r\r" +
+//                        "库房电话：57835260-8030");
+                setValue(row5, 0, purchaseOrder.getRemark());
                 HSSFCellStyle cellStyle1 = row5.getCell(0).getCellStyle();
                 cellStyle1.setFont(createBoldFont(hssfWorkbook));
                 cellStyle1.getFont(hssfWorkbook).setFontHeightInPoints((short) 12);

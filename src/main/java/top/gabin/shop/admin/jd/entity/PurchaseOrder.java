@@ -37,6 +37,8 @@ public class PurchaseOrder extends BasicEntity {
     private String buyer;
     @Column(name = "ATTRIBUTE")
     private String attribute;
+    @Column(name = "REMARK")
+    private String remark;
     @OneToMany(targetEntity = PurchaseOrderItem.class, mappedBy = "order", orphanRemoval = true)
     private List<PurchaseOrderItem> purchaseOrderItemList = new ArrayList<PurchaseOrderItem>();
     @ManyToOne(targetEntity = Provider.class)
@@ -134,4 +136,11 @@ public class PurchaseOrder extends BasicEntity {
         return count;
     }
 
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
 }

@@ -6,6 +6,6 @@ import top.gabin.shop.core.product.entity.ProductBrand;
  * @author linjiabin on  16/8/8
  */
 public interface ProductBrandBuilder {
-    Long getProductBrandId();
+    Long getId();
     ProductBrand build(ProductBrand productBrand);
 }

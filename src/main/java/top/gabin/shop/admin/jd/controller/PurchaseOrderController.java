@@ -13,11 +13,11 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import top.gabin.shop.admin.jd.entity.PurchaseOrder;
 import top.gabin.shop.admin.jd.entity.WareHouse;
+import top.gabin.shop.admin.jd.form.PreOrderImportForm;
 import top.gabin.shop.admin.jd.form.PurchaseOrderImportForm;
 import top.gabin.shop.admin.jd.service.JdPurchaseOrderService;
 import top.gabin.shop.core.jpa.criteria.condition.CriteriaCondition;
 import top.gabin.shop.core.jpa.criteria.dto.PageDTO;
-import top.gabin.shop.core.jpa.criteria.service.delete.CriteriaDeleteService;
 import top.gabin.shop.core.jpa.criteria.service.query.CriteriaQueryService;
 import top.gabin.shop.core.jpa.criteria.uil.CriteriaQueryUtils;
 import top.gabin.shop.core.utils.RenderUtils;
@@ -49,8 +49,6 @@ public class PurchaseOrderController {
     @Resource(name = "criteriaQueryService")
     private CriteriaQueryService queryService;
     @Resource
-    private CriteriaDeleteService deleteService;
-    @Resource
     private JdPurchaseOrderService jdPurchaseOrderService;
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
@@ -72,7 +70,7 @@ public class PurchaseOrderController {
     @RequestMapping(value = "/list", method = RequestMethod.POST)
     @ResponseBody
     public Map dataList(HttpServletRequest request) {
-        return queryService.queryPage(PurchaseOrder.class, request, "id,orderNumber,submitDate,total,buyer,timeoutDate," +
+        return queryService.queryPage(PurchaseOrder.class, request, "remark,id,orderNumber,submitDate,total,buyer,timeoutDate," +
                 "provider.name provider,wareHouse.name warehouse,wareHouse.city city,wareHouse.detailAddress detailAddress," +
                 "wareHouse.contact contact,wareHouse.telephone telephone,count");
     }
@@ -83,6 +81,25 @@ public class PurchaseOrderController {
     }
 
 
+    @RequestMapping(value = "/importPre", method = RequestMethod.GET)
+    public String preImportView() {
+        return DIR + "/preImport";
+    }
+
+    @RequestMapping(value = "/importPre", method = RequestMethod.POST)
+    @ResponseBody
+    public Map orderImport(@RequestParam("file") MultipartFile file, HttpServletRequest request) {
+        try {
+            ImportExcel importExcel = new ImportExcel(file, 0, 0);
+            List<PreOrderImportForm> dataList = importExcel.getDataList(PreOrderImportForm.class);
+            jdPurchaseOrderService.importPreOrder(dataList);
+            return RenderUtils.SUCCESS_RESULT;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return RenderUtils.getFailMap("导入数据有异常");
+        }
+    }
+
     /**
      * 1 上传文件
      *
@@ -92,7 +109,7 @@ public class PurchaseOrderController {
      */
     @RequestMapping(value = "/import", method = RequestMethod.POST)
     @ResponseBody
-    public Map productImport(@RequestParam("file") MultipartFile file, HttpServletRequest request) {
+    public Map preOrderImport(@RequestParam("file") MultipartFile file, HttpServletRequest request) {
         try {
             ImportExcel importExcel = new ImportExcel(file, 1, 0);
             List<PurchaseOrderImportForm> dataList = importExcel.getDataList(PurchaseOrderImportForm.class);
@@ -157,7 +174,7 @@ public class PurchaseOrderController {
     }
 
     @RequestMapping(value = "/excel", method = RequestMethod.GET)
-    public void excel(HttpServletResponse response, HttpSession session) {
+    public void excel(HttpServletRequest request, HttpServletResponse response) {
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmSS");
             String path = sdf.format(new Date());
@@ -165,7 +182,8 @@ public class PurchaseOrderController {
             mkdir("download/zip");
             mkdir("download/tmp");
             String servletPath = "download/tmp/" + path;
-            jdPurchaseOrderService.excel(servletPath);
+            List<PurchaseOrder> purchaseOrders = queryService.query(PurchaseOrder.class, CriteriaQueryUtils.parseCondition(request));
+            jdPurchaseOrderService.excel(purchaseOrders, servletPath);
             zipDownload(servletPath, path, response);
             clearFile(new File("download/zip"));
             clearFile(new File("download/tmp"));
@@ -227,16 +245,5 @@ public class PurchaseOrderController {
 
     }
 
-    private class JsonData {
-        private List<PurchaseOrderImportForm> data;
-
-        public List<PurchaseOrderImportForm> getData() {
-            return data;
-        }
-
-        public void setData(List<PurchaseOrderImportForm> data) {
-            this.data = data;
-        }
-    }
 
 }

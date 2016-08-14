@@ -5,14 +5,18 @@
 package top.gabin.shop.core.product.service;
 
 import top.gabin.shop.core.product.entity.ProductBrand;
-import top.gabin.shop.core.product.form.ProductBrandForm;
+import top.gabin.shop.core.product.form.ProductBrandBuilder;
+
+import java.util.List;
 
 /**
  *
  * @author linjiabin on  16/8/8
  */
 public interface ProductBrandService {
-    ProductBrand getProductBrand(Long brandId);
+    ProductBrand get(Long brandId);
     ProductBrand getByName(String name);
-    ProductBrand saveProductBrand(ProductBrandForm productBrandForm);
+    ProductBrand saveProductBrand(ProductBrandBuilder productBrandForm);
+    List<ProductBrand> findAll();
+    void delete(List<ProductBrand> productBrandList);
 }

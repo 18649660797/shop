@@ -5,6 +5,7 @@
     <div class="row">
         <div class="span24">
             <form id="searchForm" class="form-horizontal" tabindex="0" style="outline: none;">
+                <input type="hidden" name="eq_productType" value="NORMAL"/>
                 <div class="row">
                     <div class="control-group span8">
                         <label class="control-label">商品名称：</label>
@@ -30,24 +31,12 @@
                     triggerSelected : false //触发编辑的时候不选中行
                 });
                 var columns = [
-                        {title:'商品编号',dataIndex:'id',width:80,renderer:function(v){
-                            return Search.createLink({
-                                id : 'product_edit_' + v,
-                                title : '编辑商品信息',
-                                text : '编辑',
-                                href : '/admin/product/basic/edit/' + v
-                            });
-                        }},
+                        {title:'商品编号',dataIndex:'id',width:80},
                         {title:'商品名称',dataIndex:'name',width:200},
                         {title:'销售价格',dataIndex:'salePrice',width:100,renderer:Format.renderMoney},
                         {title:'操作',dataIndex:'id',width:200,renderer : function(value,obj){
-                            var editStr =  Search.createLink({ //链接使用 此方式
-                                id : 'product_edit_' + value,
-                                title : '编辑商品信息',
-                                text : '编辑',
-                                href : '/admin/product/basic/edit/' + value
-                            }),
-                            delStr = '<span class="grid-command btn-del" title="删除学生信息">删除</span>';//页面操作不需要使用Search.createLink
+                            var editStr = '<a href="javascript:void(0);" class="btn-edit">编辑</a>&nbsp;&nbsp;&nbsp;&nbsp;',
+                            delStr = '<span class="grid-command btn-del" title="删除商品信息">删除</span>';//页面操作不需要使用Search.createLink
                             return editStr + delStr;
                         }}
                     ],
@@ -59,8 +48,9 @@
                     gridCfg = Search.createGridCfg(columns,{
                         tbar : {
                             items : [
-                                {text : '<i class="icon-plus"></i>新建',btnCls : 'button button-small',handler:function(){alert('新建');}},
-                                {text : '<i class="icon-edit"></i>编辑',btnCls : 'button button-small',handler:function(){alert('编辑');}},
+                                {text : '<i class="icon-edit"></i>新增',btnCls : 'button button-small',handler:function() {
+                                    edit(-1);
+                                }},
                                 {text : '<i class="icon-remove"></i>删除',btnCls : 'button button-small',handler : delFunction}
                             ]
                         },
@@ -84,31 +74,61 @@
                     BUI.each(items,function(item){
                         ids.push(item.id);
                     });
-
                     if(ids.length){
                         BUI.Message.Confirm('确认要删除选中的记录么？',function(){
-                            $.ajax({
-                                url : '../data/del.php',
-                                dataType : 'json',
-                                data : {ids : ids},
-                                success : function(data){
-                                    if(data.success){ //删除成功
-                                        search.load();
-                                    }else{ //删除失败
-                                        BUI.Message.Alert('删除失败！');
-                                    }
+                            $.post('/admin/product/basic/delete', {
+                                in_id: ids.join(","),
+                                eq_productType: "NORMAL"
+                            }, function (data) {
+                                if (edy.ajaxHelp.handleAjax(data)) {
+                                    search.load();
                                 }
                             });
                         },'question');
                     }
                 }
+                function edit (id) {
+                    var form;
+                    new BUI.Overlay.Dialog({
+                        title: (id && '编辑' || '新增') + '商品',
+                        width:800,
+                        height:400,
+                        closeAction: "destroy",
+                        loader : {
+                            url : '/admin/product/basic/edit/' + id,
+                            autoLoad : true, //不自动加载
+                            lazyLoad : false,
+                            callback: function() {
+                                form = new BUI.Form.Form({
+                                    srcNode : '#J_Form',
+                                    submitType : 'ajax',
+                                    callback : function(data){
+                                        if (edy.ajaxHelp.handleAjax((data))) {
+                                            edy.alert(data.message || "操作成功");
+                                            store.load();
+                                        }
+                                    }
+                                });
+                                form.render();
+                            }
+                        },
+                        mask:true,
+                        success: function() {
+                            form.submit();
+                            this.close();
+                        }
+                    }).show();
 
+                }
                 //监听事件，删除一条记录
-                grid.on('cellclick',function(ev){
+                grid.on('cellclick', function (ev) {
                     var sender = $(ev.domTarget); //点击的Dom
-                    if(sender.hasClass('btn-del')){
+                    if (sender.hasClass('btn-del')) {
                         var record = ev.record;
                         delItems([record]);
+                    } else if (sender.hasClass('btn-edit')) {
+                        var record = ev.record;
+                        edit(record.id);
                     }
                 });
             });

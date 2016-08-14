@@ -8,10 +8,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import top.gabin.shop.core.product.dao.ProductBrandDao;
 import top.gabin.shop.core.product.entity.ProductBrand;
-import top.gabin.shop.core.product.form.ProductBrandForm;
+import top.gabin.shop.core.product.form.ProductBrandBuilder;
 import top.gabin.shop.core.product.service.ProductBrandService;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  *
@@ -23,7 +24,7 @@ public class ProductBrandServiceImpl implements ProductBrandService {
     @Resource
     private ProductBrandDao productBrandDao;
 
-    public ProductBrand getProductBrand(Long brandId) {
+    public ProductBrand get(Long brandId) {
         return productBrandDao.getOne(brandId);
     }
 
@@ -32,7 +33,7 @@ public class ProductBrandServiceImpl implements ProductBrandService {
     }
 
     @Transactional
-    public ProductBrand saveProductBrand(ProductBrandForm productBrandForm) {
+    public ProductBrand saveProductBrand(ProductBrandBuilder productBrandForm) {
         ProductBrand productBrand = null;
         if (productBrandForm.getId() != null) {
             productBrand = productBrandDao.getOne(productBrandForm.getId());
@@ -40,8 +41,15 @@ public class ProductBrandServiceImpl implements ProductBrandService {
         if (productBrand == null) {
             productBrand = new ProductBrand();
         }
-        productBrand.setName(productBrandForm.getName());
+        productBrand = productBrandForm.build(productBrand);
         return productBrandDao.save(productBrand);
     }
 
+    public List<ProductBrand> findAll() {
+        return productBrandDao.findAll();
+    }
+
+    public void delete(List<ProductBrand> productBrandList) {
+        productBrandDao.delete(productBrandList);
+    }
 }

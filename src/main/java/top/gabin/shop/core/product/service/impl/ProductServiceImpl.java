@@ -7,12 +7,14 @@ package top.gabin.shop.core.product.service.impl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import top.gabin.shop.core.product.dao.ProductDao;
+import top.gabin.shop.core.product.dao.ProductSkuDao;
 import top.gabin.shop.core.product.entity.Product;
 import top.gabin.shop.core.product.entity.ProductSku;
 import top.gabin.shop.core.product.form.ProductBuilder;
 import top.gabin.shop.core.product.service.ProductService;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  *
@@ -22,10 +24,12 @@ import javax.annotation.Resource;
 public class ProductServiceImpl implements ProductService {
     @Resource
     private ProductDao productDao;
+    @Resource
+    private ProductSkuDao productSkuDao;
 
     @Transactional
     public Product saveProduct(ProductBuilder productFormBuilder) {
-        Long productId = productFormBuilder.getProductId();
+        Long productId = productFormBuilder.getId();
         Product product = null;
         if (productId != null) {
             product = productDao.findOne(productId);
@@ -33,7 +37,10 @@ public class ProductServiceImpl implements ProductService {
         if (product == null) {
             product = new Product();
             product.setTimeWeight(System.currentTimeMillis());
+            product = productDao.save(product);
             ProductSku productSku = new ProductSku();
+            productSku.setDefaultProduct(product);
+            productSku = productSkuDao.save(productSku);
             product.setDefaultSku(productSku);
         }
         Product build = productFormBuilder.build(product);
@@ -48,6 +55,7 @@ public class ProductServiceImpl implements ProductService {
         return productDao.getProductByCommodityCode(commodityCode);
     }
 
+    @Transactional
     public void delete(Long productId) {
         Product one = productDao.findOne(productId);
         if (one != null) {
@@ -55,4 +63,10 @@ public class ProductServiceImpl implements ProductService {
             productDao.save(one);
         }
     }
+
+    @Transactional
+    public void delete(List<Product> productList) {
+        productDao.delete(productList);
+    }
+
 }

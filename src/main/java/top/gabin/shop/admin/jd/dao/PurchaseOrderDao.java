@@ -17,4 +17,6 @@ public interface PurchaseOrderDao extends JpaRepository<PurchaseOrder, Long> {
     PurchaseOrder getByOrderNumber(@Param(value = "orderNumber") String orderNumber);
     @Query(value = "FROM PurchaseOrder WHERE wareHouse.id = :wareHouseId")
     List<PurchaseOrder> findByWareHouse(@Param(value = "wareHouseId") Long wareHouseId);
+    @Query(value = "FROM PurchaseOrder WHERE orderNumber in (:orderNumber)")
+    List<PurchaseOrder> findByOrderNumber(@Param(value = "orderNumber") List<String> orderNumberList);
 }

@@ -26,6 +26,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @ComponentScan(basePackages = {
         "top.gabin.core.jpa.criteria",
         "top.gabin.shop",
+        "top.gabin.shop.**.spring.SpringBeanUtils",
         "top.gabin.shop.**.service.impl",
         "top.gabin.shop.**.aspect"
 })

@@ -31,13 +31,13 @@ public class Product extends BasicEntity {
     @Column(name = "TIME_WEIGHT")
     private Long timeWeight;
     @Column(name = "PRODUCT_TYPE")
-    private String productType;
+    private String productType = ProductType.NORMAL.name();
     @ManyToOne(targetEntity = ProductBrand.class)
     @JoinColumn(name = "BRAND_ID")
     private ProductBrand productBrand;
-    @OneToOne(targetEntity = ProductSku.class, mappedBy = "defaultProduct")
+    @OneToOne(targetEntity = ProductSku.class, mappedBy = "defaultProduct", orphanRemoval = true)
     private ProductSku defaultSku;
-    @OneToMany(targetEntity = ProductSku.class, mappedBy="product")
+    @OneToMany(targetEntity = ProductSku.class, mappedBy="product", orphanRemoval = true)
     private List<ProductSku> allSkuList;
 
     public Long getId() {

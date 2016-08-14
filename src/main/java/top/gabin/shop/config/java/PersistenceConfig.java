@@ -55,6 +55,7 @@ public class PersistenceConfig {
         factory.setPersistenceUnitName("shopPU");
         factory.setPackagesToScan("top.gabin.shop.**.entity");
         final Properties props = new Properties();
+        props.setProperty("hibernate.current_session_context_class", env.getProperty("hibernate.current_session_context_class"));
         props.setProperty("hibernate.dialect", env.getProperty("hibernate.dialect"));
         props.setProperty("hibernate.hbm2ddl.auto", env.getProperty("hibernate.hbm2ddl.auto"));
         props.setProperty("hibernate.show_sql", env.getProperty("hibernate.show_sql"));

@@ -2,7 +2,7 @@
 <head></head>
 <body>
 <div class="container">
-    <form id="J_Form" action="/admin/product/basic/edit/${(product.id)?default(-1)}" method="post" class="form-horizontal">
+    <form id="J_Form" action="/admin/jd/stockProduct/edit/${(product.id)?default(-1)}" method="post" class="form-horizontal">
         <div class="panel">
             <div class="panel-body">
                 <div class="control-group">
@@ -35,16 +35,6 @@
                         </select>
                     </div>
                 </div>
-                <#--<div class="control-group">-->
-                    <#--<div class="fixed-bar">-->
-                        <#--<div class="actions-bar">-->
-                            <#--<div class="form-actions offset3">-->
-                                <#--<button type="submit" class="button button-primary">保存</button>-->
-                                <#--<button type="reset" class="button">重置</button>-->
-                            <#--</div>-->
-                        <#--</div>-->
-                    <#--</div>-->
-                <#--</div>-->
             </div>
         </div>
     </form>
