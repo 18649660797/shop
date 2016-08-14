@@ -212,7 +212,7 @@
                         height:150,
                         closeAction: "destroy",
                         loader : {
-                            url : '/admin/jd/purchaseOrder/preImport',
+                            url : '/admin/jd/purchaseOrder/importPre',
                             autoLoad : false, //不自动加载
                             lazyLoad : false, //不延迟加载
                         },
