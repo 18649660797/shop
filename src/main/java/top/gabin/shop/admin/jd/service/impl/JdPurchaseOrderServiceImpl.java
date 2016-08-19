@@ -226,13 +226,13 @@ public class JdPurchaseOrderServiceImpl implements JdPurchaseOrderService {
                 cellStyle.setAlignment(CellStyle.ALIGN_CENTER);
                 HSSFRow row0 = createRow(sheet, j++);
                 setValue(row0, 0, "商家姓名：福建省鑫森炭业股份有限公司          电话： 18065992275     传真： ");
-                row0.getCell(0).getCellStyle().setAlignment(CellStyle.ALIGN_LEFT);
+                row0.getCell(0).setCellStyle(getLeftBorderStyle(hssfWorkbook));
                 setValue(row0, 1, " ");
                 setValue(row0, 2, " ");
                 setValue(row0, 3, " ");
                 HSSFRow row1 = createRow(sheet, j++);
                 setValue(row1, 0, "联络人:  黄正俊        地址：福建省邵武市经济技术开发区莲富路研发中心");
-                row1.getCell(0).getCellStyle().setAlignment(CellStyle.ALIGN_LEFT);
+                row1.getCell(0).setCellStyle(getLeftBorderStyle(hssfWorkbook));
                 setValue(row1, 1, " ");
                 setValue(row1, 2, " ");
                 setValue(row1, 3, " ");
@@ -244,7 +244,7 @@ public class JdPurchaseOrderServiceImpl implements JdPurchaseOrderService {
                 ts.applyFont(51, ts.length(), font1);
                 HSSFRow row2 = createRow(sheet, j++);
                 setValue(row2, 0, ts);
-                row2.getCell(0).getCellStyle().setAlignment(CellStyle.ALIGN_LEFT);
+                row2.getCell(0).setCellStyle(getLeftBorderStyle(hssfWorkbook));
                 setValue(row2, 1, "");
                 setValue(row2, 2, "");
                 row2.getCell(2).getCellStyle().setBorderLeft(HSSFCellStyle.BORDER_NONE);
@@ -307,14 +307,14 @@ public class JdPurchaseOrderServiceImpl implements JdPurchaseOrderService {
                 setValue(row5, 1, "");
                 setValue(row5, 2, "");
                 setValue(row5, 3, "");
-                row5.getCell(0).getCellStyle().setAlignment(CellStyle.ALIGN_LEFT);
+                row5.getCell(0).setCellStyle(getLeftBorderStyle(hssfWorkbook));
                 row5.getCell(0).getCellStyle().setWrapText(true);
                 row5.getCell(0).getCellStyle().setVerticalAlignment(CellStyle.ALIGN_CENTER);
-                row5.getCell(1).getCellStyle().setAlignment(CellStyle.ALIGN_LEFT);
+                row5.getCell(1).setCellStyle(getLeftBorderStyle(hssfWorkbook));
                 row5.getCell(1).getCellStyle().setVerticalAlignment(CellStyle.ALIGN_CENTER);
-                row5.getCell(2).getCellStyle().setAlignment(CellStyle.ALIGN_LEFT);
+                row5.getCell(2).setCellStyle(getLeftBorderStyle(hssfWorkbook));
                 row5.getCell(2).getCellStyle().setVerticalAlignment(CellStyle.ALIGN_CENTER);
-                row5.getCell(3).getCellStyle().setAlignment(CellStyle.ALIGN_LEFT);
+                row5.getCell(3).setCellStyle(getLeftBorderStyle(hssfWorkbook));
                 row5.getCell(3).getCellStyle().setVerticalAlignment(CellStyle.ALIGN_CENTER);
                 row5.setHeight((short) (256 * 10));
                 String path = servletPath + city + "仓";
@@ -359,12 +359,22 @@ public class JdPurchaseOrderServiceImpl implements JdPurchaseOrderService {
     }
 
     private HSSFRow createRow(HSSFSheet sheet, int index) {
+        return createRow(sheet, index, (short)400);
+    }
+
+    private HSSFRow createRow(HSSFSheet sheet, int index, short height) {
         HSSFRow row = sheet.createRow(index);
-        row.setHeight((short) 400);
+        row.setHeight(height);
         return row;
     }
 
     private void setValue(HSSFRow row1, int idx, Object o) {
+        Cell cell = setValueNotStyle(row1, idx, o);
+        cell.setCellStyle(getBorderStyle(row1.getSheet().getWorkbook()));
+
+    }
+
+    private Cell setValueNotStyle(HSSFRow row1, int idx, Object o) {
         Cell cell = row1.getCell(idx);
         if (cell == null) {
             cell = row1.createCell(idx);
@@ -384,9 +394,24 @@ public class JdPurchaseOrderServiceImpl implements JdPurchaseOrderService {
                 cell.setCellValue(content);
             }
         }
+        return cell;
     }
 
     private Map<HSSFWorkbook, CellStyle> cacheMap = new HashMap<HSSFWorkbook, CellStyle>();
+
+    private CellStyle getLeftBorderStyle(HSSFWorkbook hssfWorkbook) {
+        CellStyle borderStyle = hssfWorkbook.createCellStyle();
+        borderStyle.setAlignment(CellStyle.ALIGN_LEFT);
+        borderStyle.setTopBorderColor(HSSFColor.BLACK.index);
+        borderStyle.setBottomBorderColor(HSSFColor.BLACK.index);
+        borderStyle.setRightBorderColor(HSSFColor.BLACK.index);
+        borderStyle.setLeftBorderColor(HSSFColor.BLACK.index);
+        borderStyle.setBorderBottom(HSSFCellStyle.BORDER_THIN);
+        borderStyle.setBorderLeft(HSSFCellStyle.BORDER_THIN);
+        borderStyle.setBorderRight(HSSFCellStyle.BORDER_THIN);
+        borderStyle.setBorderTop(HSSFCellStyle.BORDER_THIN);
+        return borderStyle;
+    }
 
     private CellStyle getBorderStyle(HSSFWorkbook hssfWorkbook) {
         if (cacheMap.containsKey(hssfWorkbook)) {
@@ -541,7 +566,7 @@ public class JdPurchaseOrderServiceImpl implements JdPurchaseOrderService {
     }
 
     private void excelBox(List<PurchaseOrder> purchaseOrderList, String servletPath) {
-        commonFontSize = (short) 11;
+        commonFontSize = (short) 12;
         FileOutputStream fileOut = null;
         servletPath = servletPath + "/装箱明细";
         new File(servletPath).mkdir();
@@ -560,13 +585,13 @@ public class JdPurchaseOrderServiceImpl implements JdPurchaseOrderService {
                 sheet.setDefaultColumnStyle(2, defaultCellStyle);
                 sheet.setDefaultColumnStyle(3, defaultCellStyle);
                 sheet.setDefaultRowHeight((short) (256 * 2));
-                sheet.setColumnWidth(0, 256 * 18);
+                sheet.setColumnWidth(0, 256 * 15);
                 sheet.setColumnWidth(1, 256 * 16);
                 sheet.setColumnWidth(2, 256 * 18);
                 sheet.setColumnWidth(3, 256 * 16);
                 sheet.setColumnWidth(4, 256 * 30);
-                sheet.setColumnWidth(5, 256 * 15);
-                sheet.setColumnWidth(6, 256 * 15);
+                sheet.setColumnWidth(5, 256 * 12);
+                sheet.setColumnWidth(6, 256 * 12);
                 String city = purchaseOrder.getWareHouse().getCity();
                 String orderNumber = purchaseOrder.getOrderNumber();
                 int j = 0;
@@ -581,14 +606,14 @@ public class JdPurchaseOrderServiceImpl implements JdPurchaseOrderService {
                     int boxCount = (int) Math.ceil(itemCount * 1D / boxSku);
                     totalBoxCount += boxCount;
                 }
-                HSSFRow row3 = createRow(sheet, j++);
-                setValue(row3, 0, "采购单号");
-                setValue(row3, 1, "总箱数");
-                setValue(row3, 2, "每箱序号");
-                setValue(row3, 3, "SKU编号");
-                setValue(row3, 4, "商品名称");
-                setValue(row3, 5, "数量");
-                setValue(row3, 6, "目的地");
+                HSSFRow row3 = createRow(sheet, j++, (short) 300);
+                setValueNotStyle(row3, 0, "采购单号");
+                setValueNotStyle(row3, 1, "总箱数");
+                setValueNotStyle(row3, 2, "每箱序号");
+                setValueNotStyle(row3, 3, "SKU编号");
+                setValueNotStyle(row3, 4, "商品名称");
+                setValueNotStyle(row3, 5, "数量");
+                setValueNotStyle(row3, 6, "目的地");
                 int num = 1;
                 for (PurchaseOrderItem item : purchaseOrder.getPurchaseOrderItemList()) {
                     Integer itemCount = item.getQuantity();
@@ -601,18 +626,18 @@ public class JdPurchaseOrderServiceImpl implements JdPurchaseOrderService {
                     int boxCount = (int) Math.ceil(itemCount * 1D / boxSku);
                     int finalBoxQuantity = itemCount % boxSku;
                     for (int i = 1; i <= boxCount; i++) {
-                        HSSFRow row = createRow(sheet, j++);
-                        setValue(row, 0, orderNumber);
-                        setValue(row, 1, totalBoxCount);
-                        setValue(row, 2, num++);
-                        setValue(row, 3, productSku.getCommodityCode());
-                        setValue(row, 4, skuName);
+                        HSSFRow row = createRow(sheet, j++, (short) 300);
+                        setValueNotStyle(row, 0, orderNumber);
+                        setValueNotStyle(row, 1, totalBoxCount);
+                        setValueNotStyle(row, 2, num++);
+                        setValueNotStyle(row, 3, productSku.getCommodityCode());
+                        setValueNotStyle(row, 4, skuName);
                         if (i == boxCount && finalBoxQuantity != 0) {
-                            setValue(row, 5, finalBoxQuantity);
+                            setValueNotStyle(row, 5, finalBoxQuantity);
                         } else {
-                            setValue(row, 5, boxSku);
+                            setValueNotStyle(row, 5, boxSku);
                         }
-                        setValue(row, 6, city);
+                        setValueNotStyle(row, 6, city);
                     }
                 }
                 String path = servletPath + city + "仓";
@@ -658,12 +683,12 @@ public class JdPurchaseOrderServiceImpl implements JdPurchaseOrderService {
                 HSSFFont fontAt = hssfWorkbook.getFontAt((short) 0);
                 fontAt.setFontHeightInPoints(commonFontSize);
                 fontAt.setFontName("宋体");
-                sheet.setDefaultRowHeight((short) (256 * 2));
+                sheet.setDefaultRowHeight((short) (256 * 1.5));
                 sheet.setDefaultColumnWidth(12);
                 sheet.setColumnWidth(0, 256 * 12);
-                sheet.setColumnWidth(1, 256 * 40);
+                sheet.setColumnWidth(1, 256 * 37);
                 sheet.setColumnWidth(2, 256 * 12);
-                sheet.setColumnWidth(3, 256 * 30);
+                sheet.setColumnWidth(3, 256 * 18);
                 String city = purchaseOrder.getWareHouse().getCity();
                 String orderNumber = purchaseOrder.getOrderNumber();
                 int j = 0;
@@ -679,18 +704,20 @@ public class JdPurchaseOrderServiceImpl implements JdPurchaseOrderService {
                 setValue(row, 1, " ");
                 setValue(row, 2, " ");
                 setValue(row, 3, " ");
-                HSSFCellStyle cellStyle = row.getCell(0).getCellStyle();
+                HSSFCellStyle cellStyle = hssfWorkbook.createCellStyle();
+                cellStyle.cloneStyleFrom(row.getCell(0).getCellStyle());
                 cellStyle.setFont(createHeadTitleFont(hssfWorkbook));
                 cellStyle.setAlignment(CellStyle.ALIGN_CENTER);
+                row.getCell(0).setCellStyle(cellStyle);
                 HSSFRow row0 = createRow(sheet, j++);
                 setValue(row0, 0, "商家姓名：福建省鑫森炭业股份有限公司          电话： 18065992275     传真： ");
-                row0.getCell(0).getCellStyle().setAlignment(CellStyle.ALIGN_LEFT);
+                row0.getCell(0).setCellStyle(getLeftBorderStyle(hssfWorkbook));
                 setValue(row0, 1, " ");
                 setValue(row0, 2, " ");
                 setValue(row0, 3, " ");
                 HSSFRow row1 = createRow(sheet, j++);
                 setValue(row1, 0, "联络人:  黄正俊        地址：福建省邵武市经济技术开发区莲富路研发中心");
-                row1.getCell(0).getCellStyle().setAlignment(CellStyle.ALIGN_LEFT);
+                row1.getCell(0).setCellStyle(getLeftBorderStyle(hssfWorkbook));
                 setValue(row1, 1, " ");
                 setValue(row1, 2, " ");
                 setValue(row1, 3, " ");
@@ -702,13 +729,10 @@ public class JdPurchaseOrderServiceImpl implements JdPurchaseOrderService {
                 ts.applyFont(51, ts.length(), font1);
                 HSSFRow row2 = createRow(sheet, j++);
                 setValue(row2, 0, ts);
-                row2.getCell(0).getCellStyle().setAlignment(CellStyle.ALIGN_LEFT);
+                row2.getCell(0).setCellStyle(getLeftBorderStyle(hssfWorkbook));
                 setValue(row2, 1, "");
                 setValue(row2, 2, "");
-                row2.getCell(2).getCellStyle().setBorderLeft(HSSFCellStyle.BORDER_NONE);
                 setValue(row2, 3, " ");
-                row2.getCell(1).getCellStyle().setBorderRight(HSSFCellStyle.BORDER_NONE);
-                row2.getCell(3).getCellStyle().setBorderLeft(HSSFCellStyle.BORDER_NONE);
                 HSSFRow row3 = createRow(sheet, j++);
                 setValue(row3, 0, "序号");
                 setValue(row3, 1, "商品名称");
@@ -758,20 +782,20 @@ public class JdPurchaseOrderServiceImpl implements JdPurchaseOrderService {
 //                        "\r\r" +
 //                        "库房电话：57835260-8030");
                 setValue(row5, 0, purchaseOrder.getRemark());
-                HSSFCellStyle cellStyle1 = row5.getCell(0).getCellStyle();
-                cellStyle1.setFont(createBoldFont(hssfWorkbook));
-                cellStyle1.getFont(hssfWorkbook).setFontHeightInPoints((short) 12);
+                HSSFCellStyle cellStyle4 = row5.getCell(0).getCellStyle();
+                cellStyle4.setFont(createBoldFont(hssfWorkbook));
+                cellStyle4.getFont(hssfWorkbook).setFontHeightInPoints((short) 12);
                 setValue(row5, 1, "");
                 setValue(row5, 2, "");
                 setValue(row5, 3, "");
-                row5.getCell(0).getCellStyle().setAlignment(CellStyle.ALIGN_LEFT);
+                row5.getCell(0).setCellStyle(getLeftBorderStyle(hssfWorkbook));
                 row5.getCell(0).getCellStyle().setWrapText(true);
                 row5.getCell(0).getCellStyle().setVerticalAlignment(CellStyle.ALIGN_CENTER);
-                row5.getCell(1).getCellStyle().setAlignment(CellStyle.ALIGN_LEFT);
+                row5.getCell(1).setCellStyle(getLeftBorderStyle(hssfWorkbook));
                 row5.getCell(1).getCellStyle().setVerticalAlignment(CellStyle.ALIGN_CENTER);
-                row5.getCell(2).getCellStyle().setAlignment(CellStyle.ALIGN_LEFT);
+                row5.getCell(2).setCellStyle(getLeftBorderStyle(hssfWorkbook));
                 row5.getCell(2).getCellStyle().setVerticalAlignment(CellStyle.ALIGN_CENTER);
-                row5.getCell(3).getCellStyle().setAlignment(CellStyle.ALIGN_LEFT);
+                row5.getCell(3).setCellStyle(getLeftBorderStyle(hssfWorkbook));
                 row5.getCell(3).getCellStyle().setVerticalAlignment(CellStyle.ALIGN_CENTER);
                 row5.setHeight((short) (256 * 10));
                 String path = servletPath + city + "仓";
