@@ -22,7 +22,7 @@ public class ApplicationFlywayListener implements ServletContextListener {
     public void contextInitialized(ServletContextEvent servletContextEvent) {
         try {
             InitialContext ctx = new InitialContext();
-            DataSource dataSource = (DataSource) ctx.lookup("jdbc/web");
+            DataSource dataSource = (DataSource) ctx.lookup("java:comp/env/jdbc/web");
             Flyway flyway = new Flyway();
             flyway.setBaselineOnMigrate(true);//指定生成一条初始版本的记录
             flyway.setBaselineVersion("2015.01.01.01.01.00");
