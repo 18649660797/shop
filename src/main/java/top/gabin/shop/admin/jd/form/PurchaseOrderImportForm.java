@@ -5,8 +5,10 @@
 package top.gabin.shop.admin.jd.form;
 
 import org.apache.commons.lang3.time.DateUtils;
-import top.gabin.shop.common.money.Money;
+import top.gabin.shop.core.product.entity.Product;
+import top.gabin.shop.core.product.service.ProductService;
 import top.gabin.shop.core.utils.excel.annotation.ExcelField;
+import top.gabin.shop.core.utils.spring.SpringBeanUtils;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -53,6 +55,7 @@ public class PurchaseOrderImportForm implements Serializable {
     private String buyer;
     @ExcelField(value = "itemCount", title = "订购时间")
     private Date orderTime;
+    private Product product;
 //    @ExcelField(value = "overdueDate", title = "入库到期时间")
 //    private Date overdueDate;
     public String getOrderNumber() {
@@ -206,4 +209,14 @@ public class PurchaseOrderImportForm implements Serializable {
         return DateUtils.addDays(orderTime, 14);
     }
 
+    public Product getProduct() {
+        if (product == null) {
+            product = SpringBeanUtils.getBean(ProductService.class).getProductByCommodityCode(commodityCode);
+        }
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
 }

@@ -10,7 +10,7 @@
                     <input type="file" name="file" id="file" data-rules="{required:true}" /><br>
                 </div>
                 <div class="control-group">
-                    <a target="_blank" href="/static/admin/download/preOrder.xlsx">模板文件</a>
+                    <a target="_blank" href="/static/admin/download/purchaseOrder.xls">模板文件</a>
                 </div>
             </div>
         </form>

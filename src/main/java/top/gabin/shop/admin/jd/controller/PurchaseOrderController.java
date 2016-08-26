@@ -125,11 +125,11 @@ public class PurchaseOrderController {
     @ResponseBody
     public Map<String, Object> previewCheck(HttpServletRequest request) {
         try {
-            List<Object> dataList = (List) request.getSession().getAttribute(IMPORT_DATA);
-            PageDTO<Object> objectPageDTO = new PageDTO<Object>(1, 30000, dataList.size(), dataList);
+            List<PurchaseOrderImportForm> dataList = (List) request.getSession().getAttribute(IMPORT_DATA);
+            PageDTO<PurchaseOrderImportForm> objectPageDTO = new PageDTO<PurchaseOrderImportForm>(1, 30000, dataList.size(), dataList);
             return RenderUtils.filterPageDataResult(objectPageDTO, "orderNumber,providerCN,providerName,commodityCode," +
                     "skuName,attribute,city,warehouseName,detailAddress,link,tel,takePrice," +
-                    "itemCount,realItemCount,total,realTotal,buyer,orderTime,overdueDate");
+                    "itemCount,realItemCount,total,realTotal,buyer,orderTime,overdueDate,product.defaultSku.name selfSkuName");
         } catch (Exception e) {
             e.printStackTrace();
             return RenderUtils.getFailMap("获取数据有异常");

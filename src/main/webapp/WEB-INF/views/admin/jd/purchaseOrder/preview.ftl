@@ -24,6 +24,7 @@
 //                {title: '供应商简码', dataIndex: 'providerCN', width: 100},
 //                {title: '供应商名称', dataIndex: 'providerName', width: 100},
                 {title: '商品编码', dataIndex: 'commodityCode', width: 100},
+                {title: '核对名称(无则异常)', dataIndex: 'selfSkuName', width: 200},
 //                {title: '商品名称', dataIndex: 'skuName', width: 100, renderer: function(val) {
 //                    return '<label title="{val}">{label}</label>'.replace('{val}', val).replace('{label}', val.substring(0 ,5) + "...")
 //                }},
