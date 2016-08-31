@@ -13,4 +13,6 @@ import top.gabin.shop.admin.jd.entity.WareHouse;
 public interface WareHouseDao extends JpaRepository<WareHouse, Long> {
     @Query("FROM WareHouse WHERE name = :name")
     WareHouse getByName(@Param(value = "name") String name);
+    @Query("FROM WareHouse WHERE city = :city AND name = :name")
+    WareHouse get(@Param(value = "city") String city, @Param(value = "name") String name);
 }

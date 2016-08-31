@@ -480,9 +480,10 @@ public class JdPurchaseOrderServiceImpl implements JdPurchaseOrderService {
             }
             String warehouseName = one.getWarehouseName();
             String city = one.getCity();
-            WareHouse wareHouse = cacheWareHouseMap.get(warehouseName);
+            String cacheKey = city + "_" + warehouseName;
+            WareHouse wareHouse = cacheWareHouseMap.get(cacheKey);
             if (wareHouse == null) {
-                wareHouse = wareHouseDao.getByName(warehouseName);
+                wareHouse = wareHouseDao.get(city, warehouseName);
             }
             if (wareHouse == null) {
                 wareHouse = new WareHouse();
@@ -492,9 +493,9 @@ public class JdPurchaseOrderServiceImpl implements JdPurchaseOrderService {
                 wareHouse.setContact(one.getLink());
                 wareHouse.setTelephone(one.getTel());
                 wareHouse = wareHouseDao.save(wareHouse);
-                cacheWareHouseMap.put(warehouseName, wareHouse);
+                cacheWareHouseMap.put(cacheKey, wareHouse);
             } else {
-                cacheWareHouseMap.put(warehouseName, wareHouse);
+                cacheWareHouseMap.put(cacheKey, wareHouse);
             }
             purchaseOrder.setProvider(provider);
             purchaseOrder.setWareHouse(wareHouse);
